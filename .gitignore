@@ -1,0 +1,16 @@
+# Build output
+build/
+out/
+
+# Compiled binaries and objects
+*.o
+*.obj
+*.exe
+*.a
+*.lib
+
+# Editor / tooling
+.cache/
+.vs/
+compile_commands.json
+CMakeUserPresets.json
