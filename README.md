@@ -17,7 +17,7 @@ A [dev container](https://containers.dev/) gives every contributor the same Linu
 - **VS Code:** install the *Dev Containers* extension, open the folder, then run **Dev Containers: Reopen in Container**. The CMake Tools extension picks up the presets automatically.
 - **Zed:** open the folder; when Zed detects `.devcontainer/devcontainer.json`, accept the prompt to open it in the container. Alternatively run the [Dev Container CLI](https://github.com/devcontainers/cli) yourself: `devcontainer up --workspace-folder .` then `devcontainer exec --workspace-folder . bash`.
 
-The first time the container is created, it configures the `debug` build automatically.
+The first time the container is created, it configures the `debug` build automatically. If you created the container before `just` was added, run **Dev Containers: Rebuild Container** to get it.
 
 ### Option B — Native toolchain
 
@@ -31,35 +31,40 @@ Install a C++20 compiler, CMake ≥ 3.25 and Ninja, plus [`just`](https://github
 
 ### Build and run the Hello World demo
 
-From the repository root, use the shortcuts from the [`justfile`](justfile):
+From the repository root, use the shortcuts from the [`justfile`](justfile). The right column shows the commands each one runs, if you don't have `just`:
 
-| Command      | What it does                                   |
-|--------------|------------------------------------------------|
-| `just build` | Configure and compile                          |
-| `just start` | Build, then run the renderer                   |
-| `just test`  | Build, then run the unit tests                 |
-| `just clean` | Delete the `build/` folder                     |
-| `just`       | List the commands                              |
+| Command      | What it does                  | Without `just`                                                        |
+|--------------|-------------------------------|-----------------------------------------------------------------------|
+| `just build` | Configure and compile         | `cmake --preset debug` then `cmake --build --preset debug`            |
+| `just start` | Build, then run the renderer  | `just build` steps, then `./build/debug/raytracer`                     |
+| `just test`  | Build, then run the unit tests| `just build` steps, then `ctest --preset debug`                        |
+| `just clean` | Delete all build output       | `cmake -E rm -rf build`                                               |
+| `just`       | List the commands             |                                                                       |
 
-They use the `debug` build by default. Add `preset=release` for an optimised build, for example `just preset=release start`.
+The commands use the `debug` preset by default. Add `preset=release` for an optimised build in `build/release/`, for example `just preset=release start`. Without `just`, replace `debug` with `release`.
 
-> There is no `make`: the commands start with `just`.
+#### Prefer `make`?
 
-Without `just`, run the CMake commands directly:
+A [`Makefile`](Makefile) gives the same commands. `make` is already installed in the dev container, so you can run these from its terminal:
 
-```sh
-cmake --preset debug          # configure (downloads GoogleTest on the first run)
-cmake --build --preset debug  # compile
-./build/debug/raytracer       # run  (Windows: .\build\debug\raytracer.exe)
-```
+| Command      | What it does                             |
+|--------------|------------------------------------------|
+| `make`       | Configure and compile (same as `make build`) |
+| `make build` | Configure and compile                    |
+| `make run`   | Build, then run the renderer             |
+| `make test`  | Build, then run the unit tests           |
+| `make clean` | Delete all build output                  |
+| `make help`  | List the commands                        |
 
-Expected output:
+Add `preset=release` for an optimised build, for example `make test preset=release`. On native Windows, `make` is not installed by default: install it once with `winget install ezwinports.make`, then open a new terminal. A normal PowerShell works: on Windows the `Makefile` loads the Visual Studio build tools itself, through [`scripts/vsenv.cmd`](scripts/vsenv.cmd).
+
+The first `just build` downloads GoogleTest. `just start` should print:
 
 ```
 Hello, World!
 ```
 
-Use `release` instead of `debug` for an optimised build in `build/release/`.
+If you switch between the dev container and a native build, run `just clean` first: they cannot share the same `build/` folder.
 
 ## Testing and TDD
 
@@ -71,13 +76,7 @@ Run the whole suite:
 just test
 ```
 
-Without `just`:
-
-```sh
-cmake --build --preset debug && ctest --preset debug
-```
-
-Or configure, build and test in one command:
+Without `just`, configure, build and test in one command (this is also what CI runs):
 
 ```sh
 cmake --workflow --preset debug
@@ -117,6 +116,8 @@ tests/                GoogleTest unit tests (raytracer_tests)
 CMakeLists.txt        Build definition
 CMakePresets.json     Shared configure/build/test presets
 justfile              Short commands: just build / start / test / clean
+Makefile              Same commands with make: make build / run / test / clean
+scripts/              Helper scripts (vsenv.cmd loads the Visual Studio tools for make on Windows)
 docs/adr/             Architecture decision records
 .github/              CI workflow, pull request and issue templates
 ```

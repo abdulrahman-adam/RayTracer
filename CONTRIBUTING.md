@@ -32,6 +32,8 @@ The [`justfile`](justfile) gives short commands for the CMake presets (see [ADR 
 
 They use the `debug` preset by default. Add `preset=release` for an optimised build, for example `just preset=release test`.
 
+The [`Makefile`](Makefile) gives the same commands with `make` (see [ADR 0006](docs/adr/0006-makefile-shortcuts.md)): `make build` (or just `make`), `make run`, `make test` and `make clean`. `make` is installed in the dev container. Add `preset=release` for an optimised build, for example `make test preset=release`.
+
 If you don't have `just`, use CMake directly:
 
 ```sh

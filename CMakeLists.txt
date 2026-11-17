@@ -24,6 +24,7 @@ endif()
 # Core library: all engine code lives here so the app and tests share it.
 add_library(raytracer_core
     src/greeting.cpp
+    src/vector.cpp
 )
 target_include_directories(raytracer_core PUBLIC include)
 target_link_libraries(raytracer_core PRIVATE raytracer_warnings)

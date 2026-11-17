@@ -15,7 +15,9 @@ just clean    # delete build/
 
 Add `preset=release` for an optimised build, e.g. `just preset=release test`. If `just` is not installed, run the CMake commands shown in parentheses.
 
-When you add or rename a CMake preset, update `justfile` to match.
+The `Makefile` gives the same commands with `make` (ADR 0006): `make` / `make build`, `make run`, `make test`, `make clean`, with `preset=release` as an option, e.g. `make test preset=release`.
+
+When you add or rename a CMake preset or a command, update both `justfile` and `Makefile` to match.
 
 ## Contributor docs
 
