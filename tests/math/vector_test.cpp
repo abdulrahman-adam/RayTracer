@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "raytracer/vector.hpp"
+#include "raytracer/math/vector.hpp"
 
 TEST(Vector, AddsTwoVectors)
 {
@@ -9,9 +9,9 @@ TEST(Vector, AddsTwoVectors)
 
     raytracer::Vector result = a.add(b);
 
-    EXPECT_DOUBLE_EQ(result.getX(), 5.0);
-    EXPECT_DOUBLE_EQ(result.getY(), 7.0);
-    EXPECT_DOUBLE_EQ(result.getZ(), 9.0);
+    EXPECT_DOUBLE_EQ(result.x(), 5.0);
+    EXPECT_DOUBLE_EQ(result.y(), 7.0);
+    EXPECT_DOUBLE_EQ(result.z(), 9.0);
 }
 
 TEST(Vector, SubtractsTwoVectors)
@@ -21,7 +21,7 @@ TEST(Vector, SubtractsTwoVectors)
 
     raytracer::Vector result = a.subtract(b);
 
-    EXPECT_DOUBLE_EQ(result.getX(), 4.0);
-    EXPECT_DOUBLE_EQ(result.getY(), 2.0);
-    EXPECT_DOUBLE_EQ(result.getZ(), -1.0);
+    EXPECT_DOUBLE_EQ(result.x(), 4.0);
+    EXPECT_DOUBLE_EQ(result.y(), 2.0);
+    EXPECT_DOUBLE_EQ(result.z(), -1.0);
 }

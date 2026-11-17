@@ -14,7 +14,7 @@ FetchContent_MakeAvailable(googletest)
 # Add new test files to this list.
 add_executable(raytracer_tests
     greeting_test.cpp
-    vector_test.cpp
+    math/vector_test.cpp
 )
 target_link_libraries(raytracer_tests PRIVATE raytracer_core raytracer_warnings GTest::gtest_main)
 

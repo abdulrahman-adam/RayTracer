@@ -19,6 +19,13 @@ The `Makefile` gives the same commands with `make` (ADR 0006): `make` / `make bu
 
 When you add or rename a CMake preset or a command, update both `justfile` and `Makefile` to match.
 
+## Code style
+
+- Group files by concept, with the same folder in `include/raytracer/`, `src/` and `tests/`. For example, the Vector class is `include/raytracer/math/vector.hpp`, `src/math/vector.cpp` and `tests/math/vector_test.cpp`. Include headers with their concept folder: `#include "raytracer/math/vector.hpp"`. `src/main.cpp` stays at the top of `src/`.
+
+- Private member variables start with an underscore, e.g. `_x`. The underscore must be followed by a lowercase letter: names like `_X` or `__x` are reserved by the C++ standard.
+- Do not use a `get` prefix on accessors: name them after what they return, e.g. `x()` rather than `getX()`.
+
 ## Contributor docs
 
 - `CONTRIBUTING.md`: dev container setup, `just` commands, TDD workflow, ADR process and how to submit a pull request. Keep it in sync when commands, tools or the workflow change.

@@ -49,8 +49,8 @@ To run only some tests: `ctest --preset debug -R <pattern>`.
 
 We develop in small red → green → refactor steps, with [GoogleTest](https://google.github.io/googletest/) (see [ADR 0003](docs/adr/0003-googletest.md)).
 
-1. **Red:** write a test for the behaviour you want in `tests/<feature>_test.cpp`. Add new test files to the list in [`tests/CMakeLists.txt`](tests/CMakeLists.txt). Run the tests and watch the new one fail (or fail to compile).
-2. **Green:** write just enough code to make it pass. Headers go in `include/raytracer/`, sources in `src/`. Add new `.cpp` files to `raytracer_core` in the root [`CMakeLists.txt`](CMakeLists.txt).
+1. **Red:** write a test for the behaviour you want in `tests/<concept>/<feature>_test.cpp` (e.g. `tests/math/vector_test.cpp`). Add new test files to the list in [`tests/CMakeLists.txt`](tests/CMakeLists.txt). Run the tests and watch the new one fail (or fail to compile).
+2. **Green:** write just enough code to make it pass. Group files by concept: headers go in `include/raytracer/<concept>/`, sources in `src/<concept>/` (e.g. `include/raytracer/math/vector.hpp` and `src/math/vector.cpp`). Add new `.cpp` files to `raytracer_core` in the root [`CMakeLists.txt`](CMakeLists.txt).
 3. **Refactor:** clean up the code while all tests stay green.
 
 All engine code goes into the `raytracer_core` library, so the tests can use it directly. `src/main.cpp` stays a thin entry point. The project compiles with strict warnings (`-Wall -Wextra -Wpedantic -Wshadow -Wconversion`). Keep your code free of warnings.

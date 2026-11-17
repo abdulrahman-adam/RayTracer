@@ -12,9 +12,9 @@ public:
     Vector(double x, double y, double z);
 
     // Read-only access to the components.
-    double getX() const;
-    double getY() const;
-    double getZ() const;
+    double x() const;
+    double y() const;
+    double z() const;
 
     // Returns a new vector that is this vector plus `other`.
     // Neither vector is changed.
@@ -25,9 +25,9 @@ public:
     Vector subtract(const Vector& other) const;
 
 private:
-    double x_;
-    double y_;
-    double z_;
+    double _x;
+    double _y;
+    double _z;
 };
 
 } // namespace raytracer
