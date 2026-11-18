@@ -1,43 +1,34 @@
 #include <iostream>
 
 #include "greeting.hpp"
-#include "ray/ray.hpp"
 #include "camera/camera.hpp"
-#include "colour/colour.hpp"
 #include "geometry/sphere.hpp"
 #include "image/image.hpp"
 #include "io/png_saver.hpp"
+#include "math/vector.hpp"
 
 using raytracer::Camera;
-using raytracer::Colour;
 using raytracer::Image;
 using raytracer::PngSaver;
-using raytracer::Ray;
 using raytracer::Sphere;
+using raytracer::Vector;
 
 int main()
 {
     std::cout << raytracer::greeting() << '\n';
-    Sphere sphere(raytracer::Vector(0, 0, 9), 5);
 
-    Camera camera(raytracer::Vector(0, 0, 1));
-    Ray ray = camera.rayThroughCenter();
+    const int imageWidth = 512;
+    const int imageHeight = 512;
 
-    Colour colour(0, 0, 0);
+    Sphere sphere(Vector(0, 0, 9), 5);
+    Camera camera(Vector(0, 0, -1), 2.0);
+    Image image(imageWidth, imageHeight);
 
-    bool hit = sphere.hit(ray);
-    if(hit)
-    {
-        colour = Colour(1, 0, 5);
-    }
-    std::cout << "Colour: (" << colour.r() << "," << colour.g() << "," << colour.b() << ")\n";
-
-
-    Image image(800, 600);
-    image.setPixel(400,300, colour);
+    camera.render(sphere, image);
 
     PngSaver saver;
     saver.save(image, "output.png");
-    
+    std::cout << "Saved output.png (" << imageWidth << "x" << imageHeight << ")\n";
+
     return 0;
 }
