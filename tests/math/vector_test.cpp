@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "raytracer/math/vector.hpp"
+#include "math/vector.hpp"
 
 TEST(Vector, AddsTwoVectors)
 {

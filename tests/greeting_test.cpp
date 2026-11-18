@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "raytracer/greeting.hpp"
+#include "greeting.hpp"
 
 TEST(Greeting, SaysHelloWorld)
 {

@@ -28,6 +28,10 @@ public:
     // you can write `v * 2.0`. The vector is not changed.
     Vector operator*(double scalar) const;
 
+    // Returns the dot product of this vector and `other`:
+    // x * other.x + y * other.y + z * other.z. Neither vector is changed.
+    double dot(const Vector& other) const;
+
 private:
     double _x;
     double _y;

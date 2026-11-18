@@ -1,4 +1,4 @@
-#include "raytracer/math/vector.hpp"
+#include "math/vector.hpp"
 
 namespace raytracer {
 
@@ -40,6 +40,11 @@ Vector Vector::operator-(const Vector& other) const
 Vector Vector::operator*(double scalar) const
 {
     return Vector(_x * scalar, _y * scalar, _z * scalar);
+}
+
+double Vector::dot(const Vector& other) const
+{
+    return _x * other._x + _y * other._y + _z * other._z;
 }
 
 Vector operator*(double scalar, const Vector& v)

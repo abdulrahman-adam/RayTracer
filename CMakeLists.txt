@@ -25,8 +25,10 @@ endif()
 add_library(raytracer_core
     src/greeting.cpp
     src/math/vector.cpp
+    src/geometry/ray.cpp
+    src/geometry/sphere.cpp
 )
-target_include_directories(raytracer_core PUBLIC include)
+target_include_directories(raytracer_core PUBLIC src)
 target_link_libraries(raytracer_core PRIVATE raytracer_warnings)
 
 # Executable: a thin entry point over the core library.
