@@ -19,6 +19,7 @@ add_executable(raytracer_tests
     geometry/sphere_test.cpp
     camera/camera_test.cpp
     colour/colour_test.cpp
+    image/image_test.cpp
 )
 target_link_libraries(raytracer_tests PRIVATE raytracer_core raytracer_warnings GTest::gtest_main)
 

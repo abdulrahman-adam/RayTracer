@@ -29,6 +29,7 @@ add_library(raytracer_core
     src/geometry/sphere.cpp
     src/camera/camera.cpp
     src/colour/colour.cpp
+    src/image/image.cpp
 )
 target_include_directories(raytracer_core PUBLIC src)
 target_link_libraries(raytracer_core PRIVATE raytracer_warnings)

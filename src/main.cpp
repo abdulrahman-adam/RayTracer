@@ -5,9 +5,11 @@
 #include "camera/camera.hpp"
 #include "colour/colour.hpp"
 #include "geometry/sphere.hpp"
+#include "image/image.hpp"
 
 using raytracer::Camera;
 using raytracer::Colour;
+using raytracer::Image;
 using raytracer::Ray;
 using raytracer::Sphere;
 
@@ -28,6 +30,9 @@ int main()
     }
     std::cout << "Colour: (" << colour.r() << "," << colour.g() << "," << colour.b() << ")\n";
 
+
+    Image image(800, 600);
+    image.setPixel(400,300, colour);
     
     return 0;
 }
