@@ -6,10 +6,12 @@
 #include "colour/colour.hpp"
 #include "geometry/sphere.hpp"
 #include "image/image.hpp"
+#include "io/png_saver.hpp"
 
 using raytracer::Camera;
 using raytracer::Colour;
 using raytracer::Image;
+using raytracer::PngSaver;
 using raytracer::Ray;
 using raytracer::Sphere;
 
@@ -33,6 +35,9 @@ int main()
 
     Image image(800, 600);
     image.setPixel(400,300, colour);
+
+    PngSaver saver;
+    saver.save(image, "output.png");
     
     return 0;
 }

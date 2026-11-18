@@ -20,8 +20,10 @@ add_executable(raytracer_tests
     camera/camera_test.cpp
     colour/colour_test.cpp
     image/image_test.cpp
+    io/png_saver_test.cpp
 )
-target_link_libraries(raytracer_tests PRIVATE raytracer_core raytracer_warnings GTest::gtest_main)
+# lodepng: the PNG tests decode saved files to check their pixels.
+target_link_libraries(raytracer_tests PRIVATE raytracer_core raytracer_warnings lodepng GTest::gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(raytracer_tests)
