@@ -15,6 +15,10 @@ FetchContent_MakeAvailable(googletest)
 add_executable(raytracer_tests
     greeting_test.cpp
     math/vector_test.cpp
+    ray/ray_test.cpp
+    geometry/sphere_test.cpp
+    camera/camera_test.cpp
+    colour/colour_test.cpp
 )
 target_link_libraries(raytracer_tests PRIVATE raytracer_core raytracer_warnings GTest::gtest_main)
 

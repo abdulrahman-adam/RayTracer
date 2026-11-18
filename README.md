@@ -90,7 +90,7 @@ Useful options: `ctest --preset debug -R Greeting` runs only the tests whose nam
 
    ```cpp
    #include <gtest/gtest.h>
-   #include "raytracer/vec3.hpp"
+   #include "math/vec3.hpp"
 
    TEST(Vec3, AddsComponentWise)
    {
@@ -101,7 +101,7 @@ Useful options: `ctest --preset debug -R Greeting` runs only the tests whose nam
    ```
 
    Add a new test file to the list in [`tests/CMakeLists.txt`](tests/CMakeLists.txt). Build and run the tests and watch this one fail (or fail to compile).
-2. **Green:** write just enough code in `include/raytracer/<concept>/` and `src/<concept>/` to make the test pass. Add any new `.cpp` file to `raytracer_core` in the root [`CMakeLists.txt`](CMakeLists.txt).
+2. **Green:** write just enough code in `src/<concept>/` (header and source side by side) to make the test pass. Add any new `.cpp` file to `raytracer_core` in the root [`CMakeLists.txt`](CMakeLists.txt).
 3. **Refactor:** tidy up the code while all tests stay green.
 
 Repeat in small steps. Commit when the tests pass.
@@ -110,8 +110,7 @@ Repeat in small steps. Commit when the tests pass.
 
 ```
 .devcontainer/        Docker-based development environment
-include/raytracer/    Public headers, grouped by concept (e.g. math/)
-src/                  Engine sources grouped by concept (raytracer_core library), and main.cpp
+src/                  Engine headers and sources grouped by concept (raytracer_core library), and main.cpp
 tests/                GoogleTest unit tests (raytracer_tests), same folders as src/
 CMakeLists.txt        Build definition
 CMakePresets.json     Shared configure/build/test presets

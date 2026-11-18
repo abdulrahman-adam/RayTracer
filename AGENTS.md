@@ -21,7 +21,7 @@ When you add or rename a CMake preset or a command, update both `justfile` and `
 
 ## Code style
 
-- Group files by concept, with the same folder in `include/raytracer/`, `src/` and `tests/`. For example, the Vector class is `include/raytracer/math/vector.hpp`, `src/math/vector.cpp` and `tests/math/vector_test.cpp`. Include headers with their concept folder: `#include "raytracer/math/vector.hpp"`. `src/main.cpp` stays at the top of `src/`.
+- Group files by concept, with the same folder in `src/` and `tests/`. Headers sit next to their sources. For example, the Vector class is `src/math/vector.hpp`, `src/math/vector.cpp` and `tests/math/vector_test.cpp`. Include headers with their concept folder: `#include "math/vector.hpp"`. `src/main.cpp` stays at the top of `src/`.
 
 - Private member variables start with an underscore, e.g. `_x`. The underscore must be followed by a lowercase letter: names like `_X` or `__x` are reserved by the C++ standard.
 - Do not use a `get` prefix on accessors: name them after what they return, e.g. `x()` rather than `getX()`.
