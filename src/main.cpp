@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "greeting.hpp"
-#include "geometry/ray.hpp"
+#include "ray/ray.hpp"
 #include "geometry/sphere.hpp"
 
 int main()
@@ -11,5 +11,14 @@ int main()
 
     raytracer::Sphere sphere(raytracer::Vector(0, 0, 9), 5);
 
+    bool hit = sphere.hit(ray);
+    if(hit)
+    {
+        std::cout<< "Ray hit the shpere!\n";
+    }
+    else
+    {
+        std::cout<< "Ray missed the shpere!\n";
+    }
     return 0;
 }

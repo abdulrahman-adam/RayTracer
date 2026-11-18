@@ -1,6 +1,6 @@
 #pragma once
 
-#include "geometry/ray.hpp"
+#include "ray/ray.hpp"
 #include "math/vector.hpp"
 
 namespace raytracer {
