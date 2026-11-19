@@ -1,5 +1,6 @@
 #include "ray/ray.hpp"
 #include "geometry/sphere.hpp"
+#include <algorithm>
 #include <cmath>
 #include <utility>
 
@@ -41,22 +42,27 @@ std::optional<HitInfo> Sphere::hit(const Ray& ray) const
         return std::nullopt;
     }
 
-    // a > 0, so t2 <= t1: t2 is the nearer of the two intersections.
     double t1 = (-b + std::sqrt(delta)) / (2 * a);
     double t2 = (-b - std::sqrt(delta)) / (2 * a);
 
+    // Negative t values are behind the ray, so ignore them.
+    // Of the ones left, the closest hit is the lowest t.
     double t;
-    if(t2 >= 0)
+    if(t1 >= 0 && t2 >= 0)
     {
-        t = t2;
+        t = std::min(t1, t2);
     }
     else if(t1 >= 0)
     {
-        t = t1; // The ray starts inside the sphere.
+        t = t1;
+    }
+    else if(t2 >= 0)
+    {
+        t = t2;
     }
     else
     {
-        return std::nullopt; // The sphere is behind the ray.
+        return std::nullopt; // Both are behind the ray.
     }
 
     Vector point = ray.at(t);
