@@ -3,7 +3,9 @@
 #include <memory>
 
 #include "camera/camera.hpp"
+#include "light/light.hpp"
 #include "material/flat_shader.hpp"
+#include "material/lambert_shader.hpp"
 
 TEST(Camera, StoresPosition)
 {
@@ -112,9 +114,10 @@ TEST(Camera, RenderShadesHitPixelsWithSphereMaterialAndMissedPixelsBlack)
 {
     Camera camera(Vector(0.0, 0.0, 0.0), 5.0);
     Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0, std::make_shared<FlatShader>(Colour(1.0, 1.0, 0.0)));
+    const Light light(Vector(0.0, 0.0, 0.0), Colour(1.0, 1.0, 1.0));
     Image image(5, 3);
 
-    camera.render(sphere, image);
+    camera.render(sphere, light, image);
 
     const Colour& centre = image.pixel(2, 1);
     EXPECT_DOUBLE_EQ(centre.r(), 1.0);
@@ -125,4 +128,27 @@ TEST(Camera, RenderShadesHitPixelsWithSphereMaterialAndMissedPixelsBlack)
     EXPECT_DOUBLE_EQ(topRight.r(), 0.0);
     EXPECT_DOUBLE_EQ(topRight.g(), 0.0);
     EXPECT_DOUBLE_EQ(topRight.b(), 0.0);
+}
+
+// Same scene with a Lambert sphere, to check render hands the material the
+// hit and the light. The centre ray hits (0, 0, 4), where the normal is
+// (0, 0, -1). A light at the camera faces it head on (full colour); a light
+// behind the sphere leaves it black.
+TEST(Camera, RenderPassesTheHitAndTheLightToTheMaterial)
+{
+    Camera camera(Vector(0.0, 0.0, 0.0), 5.0);
+    Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0, std::make_shared<LambertShader>(Colour(1.0, 0.5, 0.25)));
+    Image image(5, 3);
+
+    camera.render(sphere, Light(Vector(0.0, 0.0, 0.0), Colour(1.0, 1.0, 1.0)), image);
+    const Colour& lit = image.pixel(2, 1);
+    EXPECT_DOUBLE_EQ(lit.r(), 1.0);
+    EXPECT_DOUBLE_EQ(lit.g(), 0.5);
+    EXPECT_DOUBLE_EQ(lit.b(), 0.25);
+
+    camera.render(sphere, Light(Vector(0.0, 0.0, 10.0), Colour(1.0, 1.0, 1.0)), image);
+    const Colour& unlit = image.pixel(2, 1);
+    EXPECT_DOUBLE_EQ(unlit.r(), 0.0);
+    EXPECT_DOUBLE_EQ(unlit.g(), 0.0);
+    EXPECT_DOUBLE_EQ(unlit.b(), 0.0);
 }

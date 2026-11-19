@@ -5,7 +5,7 @@ FlatShader::FlatShader(const Colour& colour)
 {
 }
 
-Colour FlatShader::shade() const
+Colour FlatShader::shade(const HitInfo& /*hit*/, const Light& /*light*/) const
 {
     return _colour;
 }

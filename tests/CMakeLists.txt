@@ -20,6 +20,7 @@ add_executable(raytracer_tests
     camera/camera_test.cpp
     colour/colour_test.cpp
     material/flat_shader_test.cpp
+    material/lambert_shader_test.cpp
     light/light_test.cpp
     image/image_test.cpp
     io/png_saver_test.cpp

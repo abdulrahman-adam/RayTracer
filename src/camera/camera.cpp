@@ -34,7 +34,7 @@ Ray Camera::rayThroughPixel(int column, int row, int imageWidth, int imageHeight
     return Ray(_position, direction);
 }
 
-void Camera::render(const Sphere& sphere, Image& image) const
+void Camera::render(const Sphere& sphere, const Light& light, Image& image) const
 {
     const int imageWidth = static_cast<int>(image.width());
     const int imageHeight = static_cast<int>(image.height());
@@ -44,7 +44,7 @@ void Camera::render(const Sphere& sphere, Image& image) const
             const Ray ray = rayThroughPixel(column, row, imageWidth, imageHeight);
 
             const std::optional<HitInfo> hit = sphere.hit(ray);
-            const Colour colour = hit ? hit->material->shade() : Colour(0, 0, 0);
+            const Colour colour = hit ? hit->material->shade(*hit, light) : Colour(0, 0, 0);
 
             image.setPixel(static_cast<unsigned int>(column), static_cast<unsigned int>(row), colour);
         }

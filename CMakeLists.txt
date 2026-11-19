@@ -46,6 +46,7 @@ add_library(raytracer_core
     src/camera/camera.cpp
     src/colour/colour.cpp
     src/material/flat_shader.cpp
+    src/material/lambert_shader.cpp
     src/light/light.cpp
     src/image/image.cpp
     src/io/png_saver.cpp

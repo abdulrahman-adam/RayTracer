@@ -6,6 +6,7 @@
 #include "colour/colour.hpp"
 #include "geometry/hit_info.hpp"
 #include "geometry/sphere.hpp"
+#include "light/light.hpp"
 #include "material/flat_shader.hpp"
 #include "ray/ray.hpp"
 
@@ -28,7 +29,9 @@ TEST(Sphere, StoresMaterial)
 
     EXPECT_EQ(&sphere.material(), material.get());
 
-    const Colour colour = sphere.material().shade();
+    const HitInfo anyHit{Vector(0.0, 0.0, 0.0), Vector(0.0, 1.0, 0.0), material.get()};
+    const Light anyLight(Vector(0.0, 5.0, 0.0), Colour(1.0, 1.0, 1.0));
+    const Colour colour = sphere.material().shade(anyHit, anyLight);
     EXPECT_DOUBLE_EQ(colour.r(), 0.25);
     EXPECT_DOUBLE_EQ(colour.g(), 0.5);
     EXPECT_DOUBLE_EQ(colour.b(), 0.75);

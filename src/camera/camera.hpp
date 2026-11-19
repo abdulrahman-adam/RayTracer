@@ -2,6 +2,7 @@
 
 #include "geometry/sphere.hpp"
 #include "image/image.hpp"
+#include "light/light.hpp"
 #include "math/vector.hpp"
 #include "ray/ray.hpp"
 
@@ -25,9 +26,10 @@ public:
     // The direction is not normalised: its z component is always 1.
     Ray rayThroughPixel(int column, int row, int imageWidth, int imageHeight) const;
 
-    // Renders `sphere` into `image`, one ray per pixel: pixels whose ray
-    // hits the sphere are shaded by its material, the others become black.
-    void render(const Sphere& sphere, Image& image) const;
+    // Renders `sphere` lit by `light` into `image`, one ray per pixel: pixels
+    // whose ray hits the sphere are shaded by its material, given the hit and
+    // the light; the others become black.
+    void render(const Sphere& sphere, const Light& light, Image& image) const;
 
 private:
     Vector _position;
