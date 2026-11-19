@@ -72,3 +72,14 @@ TEST(Vector, DotProductOfPerpendicularVectorsIsZero)
 
     EXPECT_DOUBLE_EQ(a.dot(b), 0.0);
 }
+
+TEST(Vector, NormalisedDividesEachComponentByTheLength)
+{
+    Vector v(3.0, 4.0, 0.0);
+
+    Vector result = v.normalised();
+
+    EXPECT_DOUBLE_EQ(result.x(), 3.0 / 5.0);
+    EXPECT_DOUBLE_EQ(result.y(), 4.0 / 5.0);
+    EXPECT_DOUBLE_EQ(result.z(), 0.0);
+}

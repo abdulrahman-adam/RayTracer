@@ -30,6 +30,11 @@ public:
     // x * other.x + y * other.y + z * other.z. Neither vector is changed.
     double dot(const Vector& other) const;
 
+    // Returns a new vector in the same direction as this one but with a
+    // length of 1, by dividing each component by the length. The vector is
+    // not changed. The zero vector has no direction, so it gives NaNs.
+    Vector normalised() const;
+
 private:
     double _x;
     double _y;

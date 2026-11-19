@@ -1,5 +1,7 @@
 #include "math/vector.hpp"
 
+#include <cmath>
+
 Vector::Vector()
     : _x(0.0), _y(0.0), _z(0.0)
 {
@@ -43,6 +45,12 @@ Vector Vector::operator*(double scalar) const
 double Vector::dot(const Vector& other) const
 {
     return _x * other._x + _y * other._y + _z * other._z;
+}
+
+Vector Vector::normalised() const
+{
+    const double length = std::sqrt(dot(*this));
+    return Vector(_x / length, _y / length, _z / length);
 }
 
 Vector operator*(double scalar, const Vector& v)
