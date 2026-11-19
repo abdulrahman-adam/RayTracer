@@ -4,8 +4,8 @@
 
 namespace raytracer {
 
-Sphere::Sphere(const Vector& center, double radius)
-    : _center(center), _radius(radius)
+Sphere::Sphere(const Vector& center, double radius, const Colour& colour)
+    : _center(center), _radius(radius), _colour(colour)
 {
 }
 
@@ -17,6 +17,11 @@ const Vector& Sphere::center() const
 double Sphere::radius() const
 {
     return _radius;
+}
+
+const Colour& Sphere::colour() const
+{
+    return _colour;
 }
 
 bool Sphere::hit(const Ray& ray) const

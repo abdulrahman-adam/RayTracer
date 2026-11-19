@@ -28,7 +28,7 @@ public:
     Ray rayThroughPixel(int column, int row, int imageWidth, int imageHeight) const;
 
     // Renders `sphere` into `image`, one ray per pixel: pixels whose ray
-    // hits the sphere become red, the others black.
+    // hits the sphere take its colour, the others become black.
     void render(const Sphere& sphere, Image& image) const;
 
 private:

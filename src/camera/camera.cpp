@@ -43,7 +43,7 @@ void Camera::render(const Sphere& sphere, Image& image) const
         for (int column = 0; column < imageWidth; ++column) {
             const Ray ray = rayThroughPixel(column, row, imageWidth, imageHeight);
 
-            const Colour colour = sphere.hit(ray) ? Colour(1, 0, 0) : Colour(0, 0, 0);
+            const Colour colour = sphere.hit(ray) ? sphere.colour() : Colour(0, 0, 0);
 
             image.setPixel(static_cast<unsigned int>(column), static_cast<unsigned int>(row), colour);
         }

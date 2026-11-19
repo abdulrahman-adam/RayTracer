@@ -108,17 +108,17 @@ TEST(Camera, RayThroughPixelScalesToPixelSize)
 // render: a 5 x 3 image over a screen 5 units wide, and a sphere of radius 1
 // straight ahead at z = 5. Only the centre pixel's ray, (0, 0, 1), hits it;
 // the corner rays, e.g. (2, 1, 1), pass far outside.
-TEST(Camera, RenderColoursHitPixelsRedAndMissedPixelsBlack)
+TEST(Camera, RenderColoursHitPixelsWithSphereColourAndMissedPixelsBlack)
 {
     raytracer::Camera camera(raytracer::Vector(0.0, 0.0, 0.0), 5.0);
-    raytracer::Sphere sphere(raytracer::Vector(0.0, 0.0, 5.0), 1.0);
+    raytracer::Sphere sphere(raytracer::Vector(0.0, 0.0, 5.0), 1.0, raytracer::Colour(1.0, 1.0, 0.0));
     raytracer::Image image(5, 3);
 
     camera.render(sphere, image);
 
     const raytracer::Colour& centre = image.pixel(2, 1);
     EXPECT_DOUBLE_EQ(centre.r(), 1.0);
-    EXPECT_DOUBLE_EQ(centre.g(), 0.0);
+    EXPECT_DOUBLE_EQ(centre.g(), 1.0);
     EXPECT_DOUBLE_EQ(centre.b(), 0.0);
 
     const raytracer::Colour& topRight = image.pixel(4, 0);

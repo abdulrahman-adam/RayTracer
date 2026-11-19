@@ -1,15 +1,19 @@
 #include <gtest/gtest.h>
 
+#include "colour/colour.hpp"
 #include "geometry/sphere.hpp"
 #include "ray/ray.hpp"
 
+using raytracer::Colour;
 using raytracer::Ray;
 using raytracer::Sphere;
 using raytracer::Vector;
 
+const Colour red(1.0, 0.0, 0.0);
+
 TEST(Sphere, StoresCenterAndRadius)
 {
-    Sphere sphere(Vector(1.0, 2.0, 3.0), 4.0);
+    Sphere sphere(Vector(1.0, 2.0, 3.0), 4.0, red);
 
     EXPECT_DOUBLE_EQ(sphere.center().x(), 1.0);
     EXPECT_DOUBLE_EQ(sphere.center().y(), 2.0);
@@ -17,11 +21,20 @@ TEST(Sphere, StoresCenterAndRadius)
     EXPECT_DOUBLE_EQ(sphere.radius(), 4.0);
 }
 
+TEST(Sphere, StoresColour)
+{
+    Sphere sphere(Vector(1.0, 2.0, 3.0), 4.0, Colour(0.25, 0.5, 0.75));
+
+    EXPECT_DOUBLE_EQ(sphere.colour().r(), 0.25);
+    EXPECT_DOUBLE_EQ(sphere.colour().g(), 0.5);
+    EXPECT_DOUBLE_EQ(sphere.colour().b(), 0.75);
+}
+
 // All the hit tests use a sphere of radius 1 centered 5 units along the Z-axis.
 
 TEST(Sphere, IsHitByRayPointingAtIt)
 {
-    Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0);
+    Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0, red);
     Ray ray(Vector(0.0, 0.0, 0.0), Vector(0.0, 0.0, 1.0));
 
     EXPECT_TRUE(sphere.hit(ray));
@@ -29,7 +42,7 @@ TEST(Sphere, IsHitByRayPointingAtIt)
 
 TEST(Sphere, IsMissedByRayPassingBesideIt)
 {
-    Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0);
+    Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0, red);
     Ray ray(Vector(2.0, 0.0, 0.0), Vector(0.0, 0.0, 1.0));
 
     EXPECT_FALSE(sphere.hit(ray));
@@ -37,7 +50,7 @@ TEST(Sphere, IsMissedByRayPassingBesideIt)
 
 TEST(Sphere, IsMissedWhenItIsBehindTheRay)
 {
-    Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0);
+    Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0, red);
     Ray ray(Vector(0.0, 0.0, 0.0), Vector(0.0, 0.0, -1.0));
 
     EXPECT_FALSE(sphere.hit(ray));
@@ -45,7 +58,7 @@ TEST(Sphere, IsMissedWhenItIsBehindTheRay)
 
 TEST(Sphere, IsHitByRayStartingInsideIt)
 {
-    Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0);
+    Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0, red);
     Ray ray(Vector(0.0, 0.0, 5.0), Vector(0.0, 0.0, 1.0));
 
     EXPECT_TRUE(sphere.hit(ray));
@@ -53,7 +66,7 @@ TEST(Sphere, IsHitByRayStartingInsideIt)
 
 TEST(Sphere, IsHitByRayTouchingItsEdge)
 {
-    Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0);
+    Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0, red);
     Ray ray(Vector(1.0, 0.0, 0.0), Vector(0.0, 0.0, 1.0));
 
     EXPECT_TRUE(sphere.hit(ray));
@@ -61,7 +74,7 @@ TEST(Sphere, IsHitByRayTouchingItsEdge)
 
 TEST(Sphere, IsHitByRayWithNonUnitDirection)
 {
-    Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0);
+    Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0, red);
     Ray ray(Vector(0.0, 0.0, 0.0), Vector(0.0, 0.0, 10.0));
 
     EXPECT_TRUE(sphere.hit(ray));
