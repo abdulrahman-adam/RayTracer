@@ -82,7 +82,7 @@ Without `just`, configure, build and test in one command (this is also what CI r
 cmake --workflow --preset debug
 ```
 
-Useful options: `ctest --preset debug -R Greeting` runs only the tests whose names match a pattern, and `./build/debug/tests/raytracer_tests --gtest_filter='Greeting.*'` runs the test binary directly.
+Useful options: `ctest --preset debug -R Sphere` runs only the tests whose names match a pattern, and `./build/debug/tests/raytracer_tests --gtest_filter='Sphere.*'` runs the test binary directly.
 
 ### TDD workflow (red → green → refactor)
 
@@ -118,6 +118,7 @@ justfile              Short commands: just build / start / test / clean
 Makefile              Same commands with make: make build / run / test / clean
 scripts/              Helper scripts (vsenv.cmd loads the Visual Studio tools for make on Windows)
 docs/adr/             Architecture decision records
+docs/domain-model.md  The domain model: the engine's concepts and how they relate
 .github/              CI workflow, pull request and issue templates
 ```
 

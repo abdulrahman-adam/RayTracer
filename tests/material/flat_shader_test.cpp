@@ -6,7 +6,7 @@
 #include "material/flat_shader.hpp"
 
 // A flat shader ignores the hit and the light, so any will do.
-static const HitInfo anyHit{Vector(0.0, 0.0, 4.0), Vector(0.0, 0.0, -1.0), nullptr};
+static const HitInfo anyHit{Vector(0.0, 0.0, 4.0), Vector(0.0, 0.0, -1.0), nullptr, 4.0};
 static const Light anyLight(Vector(0.0, 0.0, 0.0), Colour(1.0, 1.0, 1.0));
 
 TEST(FlatShader, ShadesWithItsColour)

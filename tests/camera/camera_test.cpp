@@ -3,39 +3,19 @@
 #include <memory>
 
 #include "camera/camera.hpp"
+#include "geometry/plane.hpp"
+#include "geometry/sphere.hpp"
 #include "light/light.hpp"
 #include "material/flat_shader.hpp"
 #include "material/lambert_shader.hpp"
+#include "scene/scene.hpp"
+#include "test_helpers.hpp"
 
 TEST(Camera, StoresPosition)
 {
     Camera camera(Vector(1.0, 2.0, 3.0), 5.0);
 
-    EXPECT_DOUBLE_EQ(camera.position().x(), 1.0);
-    EXPECT_DOUBLE_EQ(camera.position().y(), 2.0);
-    EXPECT_DOUBLE_EQ(camera.position().z(), 3.0);
-}
-
-TEST(Camera, RayThroughCenterStartsAtCameraPosition)
-{
-    Camera camera(Vector(1.0, 2.0, 3.0), 5.0);
-
-    Ray ray = camera.rayThroughCenter();
-
-    EXPECT_DOUBLE_EQ(ray.origin().x(), 1.0);
-    EXPECT_DOUBLE_EQ(ray.origin().y(), 2.0);
-    EXPECT_DOUBLE_EQ(ray.origin().z(), 3.0);
-}
-
-TEST(Camera, RayThroughCenterPointsAlongPositiveZ)
-{
-    Camera camera(Vector(1.0, 2.0, 3.0), 5.0);
-
-    Ray ray = camera.rayThroughCenter();
-
-    EXPECT_DOUBLE_EQ(ray.direction().x(), 0.0);
-    EXPECT_DOUBLE_EQ(ray.direction().y(), 0.0);
-    EXPECT_DOUBLE_EQ(ray.direction().z(), 1.0);
+    expectVector(camera.position(), 1.0, 2.0, 3.0);
 }
 
 // Scenario for rayThroughPixel: a screen 5 units wide, one unit in front of
@@ -48,9 +28,7 @@ constexpr int imageHeight = 3;
 
 static void expectDirection(const Ray& ray, double x, double y, double z)
 {
-    EXPECT_DOUBLE_EQ(ray.direction().x(), x);
-    EXPECT_DOUBLE_EQ(ray.direction().y(), y);
-    EXPECT_DOUBLE_EQ(ray.direction().z(), z);
+    expectVector(ray.direction(), x, y, z);
 }
 
 TEST(Camera, RayThroughCenterPixelPointsStraightAhead)
@@ -110,45 +88,61 @@ TEST(Camera, RayThroughPixelScalesToPixelSize)
 // render: a 5 x 3 image over a screen 5 units wide, and a sphere of radius 1
 // straight ahead at z = 5. Only the centre pixel's ray, (0, 0, 1), hits it;
 // the corner rays, e.g. (2, 1, 1), pass far outside.
-TEST(Camera, RenderShadesHitPixelsWithSphereMaterialAndMissedPixelsBlack)
+
+TEST(Camera, RenderShadesHitPixelsWithTheShapeMaterialAndMissedPixelsBlack)
 {
     Camera camera(Vector(0.0, 0.0, 0.0), 5.0);
-    Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0, std::make_shared<FlatShader>(Colour(1.0, 1.0, 0.0)));
-    const Light light(Vector(0.0, 0.0, 0.0), Colour(1.0, 1.0, 1.0));
+    Scene scene(Light(Vector(0.0, 0.0, 0.0), white));
+    scene.add(std::make_unique<Sphere>(Vector(0.0, 0.0, 5.0), 1.0,
+                                       std::make_shared<FlatShader>(Colour(1.0, 1.0, 0.0))));
     Image image(5, 3);
 
-    camera.render(sphere, light, image);
+    camera.render(scene, image);
 
-    const Colour& centre = image.pixel(2, 1);
-    EXPECT_DOUBLE_EQ(centre.r(), 1.0);
-    EXPECT_DOUBLE_EQ(centre.g(), 1.0);
-    EXPECT_DOUBLE_EQ(centre.b(), 0.0);
-
-    const Colour& topRight = image.pixel(4, 0);
-    EXPECT_DOUBLE_EQ(topRight.r(), 0.0);
-    EXPECT_DOUBLE_EQ(topRight.g(), 0.0);
-    EXPECT_DOUBLE_EQ(topRight.b(), 0.0);
+    expectColour(image.pixel(2, 1), 1.0, 1.0, 0.0); // centre
+    expectColour(image.pixel(4, 0), 0.0, 0.0, 0.0); // top-right
 }
 
-// Same scene with a Lambert sphere, to check render hands the material the
-// hit and the light. The centre ray hits (0, 0, 4), where the normal is
+// Same scene with a Lambert sphere, to check render shades with the hit and
+// the scene's light. The centre ray hits (0, 0, 4), where the normal is
 // (0, 0, -1). A light at the camera faces it head on (full colour); a light
 // behind the sphere leaves it black.
-TEST(Camera, RenderPassesTheHitAndTheLightToTheMaterial)
+TEST(Camera, RenderShadesWithTheHitAndTheSceneLight)
 {
     Camera camera(Vector(0.0, 0.0, 0.0), 5.0);
-    Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0, std::make_shared<LambertShader>(Colour(1.0, 0.5, 0.25)));
+    const auto matte = std::make_shared<LambertShader>(Colour(1.0, 0.5, 0.25));
     Image image(5, 3);
 
-    camera.render(sphere, Light(Vector(0.0, 0.0, 0.0), Colour(1.0, 1.0, 1.0)), image);
-    const Colour& lit = image.pixel(2, 1);
-    EXPECT_DOUBLE_EQ(lit.r(), 1.0);
-    EXPECT_DOUBLE_EQ(lit.g(), 0.5);
-    EXPECT_DOUBLE_EQ(lit.b(), 0.25);
+    Scene litFromFront(Light(Vector(0.0, 0.0, 0.0), white));
+    litFromFront.add(std::make_unique<Sphere>(Vector(0.0, 0.0, 5.0), 1.0, matte));
+    camera.render(litFromFront, image);
+    expectColour(image.pixel(2, 1), 1.0, 0.5, 0.25);
 
-    camera.render(sphere, Light(Vector(0.0, 0.0, 10.0), Colour(1.0, 1.0, 1.0)), image);
-    const Colour& unlit = image.pixel(2, 1);
-    EXPECT_DOUBLE_EQ(unlit.r(), 0.0);
-    EXPECT_DOUBLE_EQ(unlit.g(), 0.0);
-    EXPECT_DOUBLE_EQ(unlit.b(), 0.0);
+    Scene litFromBehind(Light(Vector(0.0, 0.0, 10.0), white));
+    litFromBehind.add(std::make_unique<Sphere>(Vector(0.0, 0.0, 5.0), 1.0, matte));
+    camera.render(litFromBehind, image);
+    expectColour(image.pixel(2, 1), 0.0, 0.0, 0.0);
+}
+
+// A ball on a floor. The floor is the plane y = -0.5, facing up. The bottom
+// row's rays point down, e.g. (-2, -1, 1), so they hit the floor; the middle
+// row's rays are level with it and the top row's point up, so they miss it.
+// The centre ray still hits the ball.
+TEST(Camera, RenderShowsEveryShapeInTheScene)
+{
+    Camera camera(Vector(0.0, 0.0, 0.0), 5.0);
+    Scene scene(Light(Vector(0.0, 0.0, 0.0), white));
+    scene.add(std::make_unique<Sphere>(Vector(0.0, 0.0, 5.0), 1.0,
+                                       std::make_shared<FlatShader>(Colour(1.0, 1.0, 0.0))));
+    scene.add(std::make_unique<Plane>(Vector(0.0, -0.5, 0.0), Vector(0.0, 1.0, 0.0),
+                                      std::make_shared<FlatShader>(Colour(0.5, 0.5, 0.5))));
+    Image image(5, 3);
+
+    camera.render(scene, image);
+
+    expectColour(image.pixel(2, 1), 1.0, 1.0, 0.0); // centre: the ball
+    expectColour(image.pixel(0, 2), 0.5, 0.5, 0.5); // bottom-left: the floor
+    expectColour(image.pixel(4, 2), 0.5, 0.5, 0.5); // bottom-right: the floor
+    expectColour(image.pixel(0, 1), 0.0, 0.0, 0.0); // middle-left: nothing
+    expectColour(image.pixel(4, 0), 0.0, 0.0, 0.0); // top-right: nothing
 }

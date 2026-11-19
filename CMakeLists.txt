@@ -39,10 +39,12 @@ target_include_directories(lodepng SYSTEM PUBLIC ${lodepng_SOURCE_DIR})
 
 # Core library: all engine code lives here so the app and tests share it.
 add_library(raytracer_core
-    src/greeting.cpp
     src/math/vector.cpp
     src/ray/ray.cpp
     src/geometry/sphere.cpp
+    src/geometry/plane.cpp
+    src/scene/scene.cpp
+    src/trace/trace.cpp
     src/camera/camera.cpp
     src/colour/colour.cpp
     src/material/flat_shader.cpp

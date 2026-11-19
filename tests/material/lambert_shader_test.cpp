@@ -6,18 +6,10 @@
 #include "geometry/hit_info.hpp"
 #include "light/light.hpp"
 #include "material/lambert_shader.hpp"
+#include "test_helpers.hpp"
 
 // All the tests shade the point (0, 0, 0) on a surface facing up, (0, 1, 0).
-static const HitInfo hit{Vector(0.0, 0.0, 0.0), Vector(0.0, 1.0, 0.0), nullptr};
-
-static const Colour white(1.0, 1.0, 1.0);
-
-static void expectColour(const Colour& c, double r, double g, double b)
-{
-    EXPECT_DOUBLE_EQ(c.r(), r);
-    EXPECT_DOUBLE_EQ(c.g(), g);
-    EXPECT_DOUBLE_EQ(c.b(), b);
-}
+static const HitInfo hit{Vector(0.0, 0.0, 0.0), Vector(0.0, 1.0, 0.0), nullptr, 1.0};
 
 // Light straight above: normal and light direction are the same, dot = 1.
 TEST(LambertShader, LightStraightAboveGivesFullColour)

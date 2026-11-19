@@ -5,10 +5,12 @@
 
 #include "colour/colour.hpp"
 #include "geometry/hit_info.hpp"
+#include "geometry/shape.hpp"
 #include "geometry/sphere.hpp"
 #include "light/light.hpp"
 #include "material/flat_shader.hpp"
 #include "ray/ray.hpp"
+#include "test_helpers.hpp"
 
 const auto red = std::make_shared<FlatShader>(Colour(1.0, 0.0, 0.0));
 
@@ -16,9 +18,7 @@ TEST(Sphere, StoresCenterAndRadius)
 {
     Sphere sphere(Vector(1.0, 2.0, 3.0), 4.0, red);
 
-    EXPECT_DOUBLE_EQ(sphere.center().x(), 1.0);
-    EXPECT_DOUBLE_EQ(sphere.center().y(), 2.0);
-    EXPECT_DOUBLE_EQ(sphere.center().z(), 3.0);
+    expectVector(sphere.center(), 1.0, 2.0, 3.0);
     EXPECT_DOUBLE_EQ(sphere.radius(), 4.0);
 }
 
@@ -29,22 +29,12 @@ TEST(Sphere, StoresMaterial)
 
     EXPECT_EQ(&sphere.material(), material.get());
 
-    const HitInfo anyHit{Vector(0.0, 0.0, 0.0), Vector(0.0, 1.0, 0.0), material.get()};
-    const Light anyLight(Vector(0.0, 5.0, 0.0), Colour(1.0, 1.0, 1.0));
-    const Colour colour = sphere.material().shade(anyHit, anyLight);
-    EXPECT_DOUBLE_EQ(colour.r(), 0.25);
-    EXPECT_DOUBLE_EQ(colour.g(), 0.5);
-    EXPECT_DOUBLE_EQ(colour.b(), 0.75);
+    const HitInfo anyHit{Vector(0.0, 0.0, 0.0), Vector(0.0, 1.0, 0.0), material.get(), 1.0};
+    const Light anyLight(Vector(0.0, 5.0, 0.0), white);
+    expectColour(sphere.material().shade(anyHit, anyLight), 0.25, 0.5, 0.75);
 }
 
 // All the hit tests use a sphere of radius 1 centered 5 units along the Z-axis.
-
-static void expectVector(const Vector& v, double x, double y, double z)
-{
-    EXPECT_DOUBLE_EQ(v.x(), x);
-    EXPECT_DOUBLE_EQ(v.y(), y);
-    EXPECT_DOUBLE_EQ(v.z(), z);
-}
 
 TEST(Sphere, IsHitByRayPointingAtIt)
 {
@@ -154,4 +144,43 @@ TEST(Sphere, RayWithNonUnitDirectionHitsTheSamePoint)
     ASSERT_TRUE(hit.has_value());
     expectVector(hit->point, 0.0, 0.0, 4.0);
     expectVector(hit->normal, 0.0, 0.0, -1.0);
+}
+
+// The hit point is origin + t * direction. From the origin along (0, 0, 1),
+// the near side z = 4 is reached at t = 4.
+TEST(Sphere, HitCarriesTheRayParameter)
+{
+    Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0, red);
+    Ray ray(Vector(0.0, 0.0, 0.0), Vector(0.0, 0.0, 1.0));
+
+    const std::optional<HitInfo> hit = sphere.hit(ray);
+
+    ASSERT_TRUE(hit.has_value());
+    EXPECT_DOUBLE_EQ(hit->t, 4.0);
+}
+
+// With direction (0, 0, 10) the same point z = 4 is reached at t = 0.4.
+TEST(Sphere, HitRayParameterDependsOnTheDirectionLength)
+{
+    Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0, red);
+    Ray ray(Vector(0.0, 0.0, 0.0), Vector(0.0, 0.0, 10.0));
+
+    const std::optional<HitInfo> hit = sphere.hit(ray);
+
+    ASSERT_TRUE(hit.has_value());
+    EXPECT_DOUBLE_EQ(hit->t, 0.4);
+}
+
+// A sphere can be used wherever a Shape is expected (Liskov substitution).
+TEST(Sphere, IsHitThroughTheShapeInterface)
+{
+    const Sphere sphere(Vector(0.0, 0.0, 5.0), 1.0, red);
+    const Shape& shape = sphere;
+    Ray ray(Vector(0.0, 0.0, 0.0), Vector(0.0, 0.0, 1.0));
+
+    const std::optional<HitInfo> hit = shape.hit(ray);
+
+    ASSERT_TRUE(hit.has_value());
+    expectVector(hit->point, 0.0, 0.0, 4.0);
+    EXPECT_EQ(hit->material, red.get());
 }

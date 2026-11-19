@@ -13,10 +13,12 @@ FetchContent_MakeAvailable(googletest)
 
 # Add new test files to this list.
 add_executable(raytracer_tests
-    greeting_test.cpp
     math/vector_test.cpp
     ray/ray_test.cpp
     geometry/sphere_test.cpp
+    geometry/plane_test.cpp
+    scene/scene_test.cpp
+    trace/trace_test.cpp
     camera/camera_test.cpp
     colour/colour_test.cpp
     material/flat_shader_test.cpp
@@ -25,6 +27,8 @@ add_executable(raytracer_tests
     image/image_test.cpp
     io/png_saver_test.cpp
 )
+# So every test file can include the shared test_helpers.hpp.
+target_include_directories(raytracer_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 # lodepng: the PNG tests decode saved files to check their pixels.
 target_link_libraries(raytracer_tests PRIVATE raytracer_core raytracer_warnings lodepng GTest::gtest_main)
 

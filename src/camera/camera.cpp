@@ -1,6 +1,6 @@
 #include "camera/camera.hpp"
 
-#include <optional>
+#include "trace/trace.hpp"
 
 Camera::Camera(const Vector& position, double screenWidth)
     : _position(position), _screenWidth(screenWidth)
@@ -10,12 +10,6 @@ Camera::Camera(const Vector& position, double screenWidth)
 const Vector& Camera::position() const
 {
     return _position;
-}
-
-Ray Camera::rayThroughCenter() const
-{
-    Vector direction(0,0,1); //Assuming the camera looks along z_axis
-    return Ray(_position, direction);
 }
 
 Ray Camera::rayThroughPixel(int column, int row, int imageWidth, int imageHeight) const
@@ -34,7 +28,7 @@ Ray Camera::rayThroughPixel(int column, int row, int imageWidth, int imageHeight
     return Ray(_position, direction);
 }
 
-void Camera::render(const Sphere& sphere, const Light& light, Image& image) const
+void Camera::render(const Scene& scene, Image& image) const
 {
     const int imageWidth = static_cast<int>(image.width());
     const int imageHeight = static_cast<int>(image.height());
@@ -42,9 +36,7 @@ void Camera::render(const Sphere& sphere, const Light& light, Image& image) cons
     for (int row = 0; row < imageHeight; ++row) {
         for (int column = 0; column < imageWidth; ++column) {
             const Ray ray = rayThroughPixel(column, row, imageWidth, imageHeight);
-
-            const std::optional<HitInfo> hit = sphere.hit(ray);
-            const Colour colour = hit ? hit->material->shade(*hit, light) : Colour(0, 0, 0);
+            const Colour colour = trace(ray, scene);
 
             image.setPixel(static_cast<unsigned int>(column), static_cast<unsigned int>(row), colour);
         }

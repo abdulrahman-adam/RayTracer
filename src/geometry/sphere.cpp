@@ -67,5 +67,5 @@ std::optional<HitInfo> Sphere::hit(const Ray& ray) const
 
     Vector point = ray.at(t);
     Vector normal = (point - C).normalised();
-    return HitInfo{point, normal, _material.get()};
+    return HitInfo{point, normal, _material.get(), t};
 }
