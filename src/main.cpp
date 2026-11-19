@@ -17,17 +17,18 @@ int main()
     const int imageWidth = 512;
     const int imageHeight = 512;
 
-    // Describe the scene, lit by a white light above, to the left of and in
-    // front of the ball
-    Scene scene(Light(Vector(-10, 10, -10), Colour(1.0, 1.0, 1.0)));
+    // Describe the scene, lit by a white light high above and a little to the
+    // left, close to the camera, so the whole front of the ball and the
+    // floor around it are well lit
+    Scene scene(Light(Vector(-3, 4, -6), Colour(1.0, 1.0, 1.0)));
 
     // A yellow ball of radius 5...
     scene.add(std::make_unique<Sphere>(Vector(0, 0, 9), 5,
                                        std::make_shared<LambertShader>(Colour(1.0, 1.0, 0.0))));
 
-    // ...resting on a grey floor: the plane y = -5, facing up
+    // ...resting on a light grey floor: the plane y = -5, facing up
     scene.add(std::make_unique<Plane>(Vector(0, -5, 0), Vector(0, 1, 0),
-                                      std::make_shared<LambertShader>(Colour(0.8, 0.8, 0.8))));
+                                      std::make_shared<LambertShader>(Colour(1.0, 1.0, 1.0))));
 
     // Position and configure the camera
     Camera camera(Vector(0, 0, -1), 2.0);
