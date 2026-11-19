@@ -5,8 +5,6 @@
 #include "math/vector.hpp"
 #include "ray/ray.hpp"
 
-namespace raytracer {
-
 // A camera placed at a point in 3D space.
 // For now it always looks along the positive Z-axis.
 class Camera {
@@ -28,12 +26,10 @@ public:
     Ray rayThroughPixel(int column, int row, int imageWidth, int imageHeight) const;
 
     // Renders `sphere` into `image`, one ray per pixel: pixels whose ray
-    // hits the sphere take its colour, the others become black.
+    // hits the sphere are shaded by its material, the others become black.
     void render(const Sphere& sphere, Image& image) const;
 
 private:
     Vector _position;
     double _screenWidth;
 };
-
-} // namespace raytracer

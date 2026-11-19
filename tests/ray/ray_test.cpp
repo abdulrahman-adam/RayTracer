@@ -4,10 +4,10 @@
 
 TEST(Ray, StoresOriginAndDirection)
 {
-    raytracer::Vector origin(1.0, 2.0, 3.0);
-    raytracer::Vector direction(0.0, 0.0, 1.0);
+    Vector origin(1.0, 2.0, 3.0);
+    Vector direction(0.0, 0.0, 1.0);
 
-    raytracer::Ray ray(origin, direction);
+    Ray ray(origin, direction);
 
     EXPECT_DOUBLE_EQ(ray.origin().x(), 1.0);
     EXPECT_DOUBLE_EQ(ray.origin().y(), 2.0);

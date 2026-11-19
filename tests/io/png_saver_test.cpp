@@ -11,8 +11,6 @@
 #include "image/image.hpp"
 #include "io/png_saver.hpp"
 
-namespace {
-
 // A PNG path in the system temp directory, removed when the test ends.
 class TempPng {
 public:
@@ -28,15 +26,13 @@ private:
     std::filesystem::path _path;
 };
 
-} // namespace
-
 TEST(PngSaver, WritesPixelsThatDecodeBackToTheImage)
 {
-    raytracer::Image image(5, 4);
-    image.setPixel(3, 2, raytracer::Colour(1.0, 0.5, 0.0));
+    Image image(5, 4);
+    image.setPixel(3, 2, Colour(1.0, 0.5, 0.0));
     TempPng file("raytracer_png_saver_test.png");
 
-    raytracer::PngSaver saver;
+    PngSaver saver;
     saver.save(image, file.path());
 
     std::vector<unsigned char> rgba;
@@ -60,11 +56,11 @@ TEST(PngSaver, WritesPixelsThatDecodeBackToTheImage)
 
 TEST(PngSaver, ClampsComponentsOutsideZeroToOne)
 {
-    raytracer::Image image(1, 1);
-    image.setPixel(0, 0, raytracer::Colour(-0.5, 0.25, 5.0));
+    Image image(1, 1);
+    image.setPixel(0, 0, Colour(-0.5, 0.25, 5.0));
     TempPng file("raytracer_png_saver_clamp_test.png");
 
-    raytracer::PngSaver saver;
+    PngSaver saver;
     saver.save(image, file.path());
 
     std::vector<unsigned char> rgba;
@@ -79,10 +75,10 @@ TEST(PngSaver, ClampsComponentsOutsideZeroToOne)
 
 TEST(PngSaver, ThrowsWhenTheFileCannotBeWritten)
 {
-    raytracer::Image image(1, 1);
+    Image image(1, 1);
     const std::string path =
         (std::filesystem::temp_directory_path() / "no_such_dir_raytracer" / "out.png").string();
 
-    raytracer::PngSaver saver;
+    PngSaver saver;
     EXPECT_THROW(saver.save(image, path), std::runtime_error);
 }

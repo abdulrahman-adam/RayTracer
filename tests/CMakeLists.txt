@@ -19,6 +19,7 @@ add_executable(raytracer_tests
     geometry/sphere_test.cpp
     camera/camera_test.cpp
     colour/colour_test.cpp
+    material/flat_shader_test.cpp
     image/image_test.cpp
     io/png_saver_test.cpp
 )

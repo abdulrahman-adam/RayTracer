@@ -4,8 +4,6 @@
 
 #include "colour/colour.hpp"
 
-namespace raytracer {
-
 // A grid of pixels, `width` columns by `height` rows.
 // Pixel (0, 0) is the top-left corner; x grows to the right, y grows down.
 // Every pixel starts black.
@@ -29,5 +27,3 @@ private:
     unsigned int _height;
     std::vector<Colour> _pixels; // row by row, starting at the top-left
 };
-
-} // namespace raytracer

@@ -8,18 +8,12 @@
 
 #include <lodepng.h>
 
-namespace raytracer {
-
-namespace {
-
 // Converts a colour component in [0, 1] to a byte in [0, 255].
-unsigned char toByte(double component)
+static unsigned char toByte(double component)
 {
     const double clamped = std::clamp(component, 0.0, 1.0);
     return static_cast<unsigned char>(std::lround(clamped * 255.0));
 }
-
-} // namespace
 
 void PngSaver::save(Image& image, const std::string& path)
 {
@@ -44,5 +38,3 @@ void PngSaver::save(Image& image, const std::string& path)
         throw std::runtime_error("Failed to save PNG '" + path + "': " + lodepng_error_text(error));
     }
 }
-
-} // namespace raytracer

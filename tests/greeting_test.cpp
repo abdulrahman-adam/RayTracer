@@ -4,5 +4,5 @@
 
 TEST(Greeting, SaysHelloWorld)
 {
-    EXPECT_EQ(raytracer::greeting(), "Hello, World!");
+    EXPECT_EQ(greeting(), "Hello, World!");
 }

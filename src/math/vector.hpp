@@ -1,7 +1,5 @@
 #pragma once
 
-namespace raytracer {
-
 // A vector in 3D space with an x, y and z component.
 class Vector {
 public:
@@ -42,5 +40,3 @@ private:
 // you can write `2.0 * v`. It is a free function, not a member, because the
 // left-hand side is a number, not a Vector.
 Vector operator*(double scalar, const Vector& v);
-
-} // namespace raytracer

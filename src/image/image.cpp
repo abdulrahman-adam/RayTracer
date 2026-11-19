@@ -2,8 +2,6 @@
 
 #include <cstddef>
 
-namespace raytracer {
-
 Image::Image(unsigned int width, unsigned int height)
     : _width(width),
       _height(height),
@@ -30,5 +28,3 @@ const Colour& Image::pixel(unsigned int x, unsigned int y) const
 {
     return _pixels[static_cast<std::size_t>(y) * _width + x];
 }
-
-} // namespace raytracer

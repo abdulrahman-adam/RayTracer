@@ -1,7 +1,5 @@
 #include "colour/colour.hpp"
 
-namespace raytracer {
-
 Colour::Colour(double r, double g, double b)
     : _r(r), _g(g), _b(b)
 {
@@ -21,5 +19,3 @@ double Colour::b() const
 {
     return _b;
 }
-
-} // namespace raytracer

@@ -2,8 +2,6 @@
 
 #include "math/vector.hpp"
 
-namespace raytracer {
-
 // A ray in 3D space: a starting point (origin) and the direction it travels.
 class Ray {
 public:
@@ -18,5 +16,3 @@ private:
     Vector _origin;
     Vector _direction;
 };
-
-} // namespace raytracer

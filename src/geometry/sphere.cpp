@@ -1,11 +1,10 @@
 #include "ray/ray.hpp"
 #include "geometry/sphere.hpp"
 #include <cmath>
+#include <utility>
 
-namespace raytracer {
-
-Sphere::Sphere(const Vector& center, double radius, const Colour& colour)
-    : _center(center), _radius(radius), _colour(colour)
+Sphere::Sphere(const Vector& center, double radius, std::shared_ptr<const Material> material)
+    : _center(center), _radius(radius), _material(std::move(material))
 {
 }
 
@@ -19,9 +18,9 @@ double Sphere::radius() const
     return _radius;
 }
 
-const Colour& Sphere::colour() const
+const Material& Sphere::material() const
 {
-    return _colour;
+    return *_material;
 }
 
 bool Sphere::hit(const Ray& ray) const
@@ -51,5 +50,3 @@ bool Sphere::hit(const Ray& ray) const
     }
     return false;
 }
-
-} // namespace raytracer

@@ -1,7 +1,5 @@
 #pragma once
 
-namespace raytracer {
-
 // A colour made of red, green and blue components.
 class Colour {
 public:
@@ -18,5 +16,3 @@ private:
     double _g;
     double _b;
 };
-
-} // namespace raytracer

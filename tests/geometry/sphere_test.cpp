@@ -1,15 +1,13 @@
 #include <gtest/gtest.h>
 
+#include <memory>
+
 #include "colour/colour.hpp"
 #include "geometry/sphere.hpp"
+#include "material/flat_shader.hpp"
 #include "ray/ray.hpp"
 
-using raytracer::Colour;
-using raytracer::Ray;
-using raytracer::Sphere;
-using raytracer::Vector;
-
-const Colour red(1.0, 0.0, 0.0);
+const auto red = std::make_shared<FlatShader>(Colour(1.0, 0.0, 0.0));
 
 TEST(Sphere, StoresCenterAndRadius)
 {
@@ -21,13 +19,17 @@ TEST(Sphere, StoresCenterAndRadius)
     EXPECT_DOUBLE_EQ(sphere.radius(), 4.0);
 }
 
-TEST(Sphere, StoresColour)
+TEST(Sphere, StoresMaterial)
 {
-    Sphere sphere(Vector(1.0, 2.0, 3.0), 4.0, Colour(0.25, 0.5, 0.75));
+    const auto material = std::make_shared<FlatShader>(Colour(0.25, 0.5, 0.75));
+    Sphere sphere(Vector(1.0, 2.0, 3.0), 4.0, material);
 
-    EXPECT_DOUBLE_EQ(sphere.colour().r(), 0.25);
-    EXPECT_DOUBLE_EQ(sphere.colour().g(), 0.5);
-    EXPECT_DOUBLE_EQ(sphere.colour().b(), 0.75);
+    EXPECT_EQ(&sphere.material(), material.get());
+
+    const Colour colour = sphere.material().shade();
+    EXPECT_DOUBLE_EQ(colour.r(), 0.25);
+    EXPECT_DOUBLE_EQ(colour.g(), 0.5);
+    EXPECT_DOUBLE_EQ(colour.b(), 0.75);
 }
 
 // All the hit tests use a sphere of radius 1 centered 5 units along the Z-axis.

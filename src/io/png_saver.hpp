@@ -4,8 +4,6 @@
 
 #include "io/image_saver.hpp"
 
-namespace raytracer {
-
 // Saves an image to disk as a PNG file, using LodePNG.
 class PngSaver : public ImageSaver {
 public:
@@ -14,5 +12,3 @@ public:
     // Throws std::runtime_error if encoding or writing fails.
     void save(Image& image, const std::string& path) override;
 };
-
-} // namespace raytracer

@@ -4,7 +4,7 @@
 
 TEST(Vector, DefaultsToZero)
 {
-    raytracer::Vector v;
+    Vector v;
 
     EXPECT_DOUBLE_EQ(v.x(), 0.0);
     EXPECT_DOUBLE_EQ(v.y(), 0.0);
@@ -13,10 +13,10 @@ TEST(Vector, DefaultsToZero)
 
 TEST(Vector, AddsTwoVectors)
 {
-    raytracer::Vector a(1.0, 2.0, 3.0);
-    raytracer::Vector b(4.0, 5.0, 6.0);
+    Vector a(1.0, 2.0, 3.0);
+    Vector b(4.0, 5.0, 6.0);
 
-    raytracer::Vector result = a + b;
+    Vector result = a + b;
 
     EXPECT_DOUBLE_EQ(result.x(), 5.0);
     EXPECT_DOUBLE_EQ(result.y(), 7.0);
@@ -25,10 +25,10 @@ TEST(Vector, AddsTwoVectors)
 
 TEST(Vector, SubtractsTwoVectors)
 {
-    raytracer::Vector a(-1.0, 4.0, 0.0);
-    raytracer::Vector b(-5.0, 2.0, 1.0);
+    Vector a(-1.0, 4.0, 0.0);
+    Vector b(-5.0, 2.0, 1.0);
 
-    raytracer::Vector result = a - b;
+    Vector result = a - b;
 
     EXPECT_DOUBLE_EQ(result.x(), 4.0);
     EXPECT_DOUBLE_EQ(result.y(), 2.0);
@@ -37,9 +37,9 @@ TEST(Vector, SubtractsTwoVectors)
 
 TEST(Vector, MultipliesByScalar)
 {
-    raytracer::Vector v(1.0, -2.0, 3.5);
+    Vector v(1.0, -2.0, 3.5);
 
-    raytracer::Vector result = v * 2.0;
+    Vector result = v * 2.0;
 
     EXPECT_DOUBLE_EQ(result.x(), 2.0);
     EXPECT_DOUBLE_EQ(result.y(), -4.0);
@@ -48,9 +48,9 @@ TEST(Vector, MultipliesByScalar)
 
 TEST(Vector, MultipliesScalarByVector)
 {
-    raytracer::Vector v(1.0, -2.0, 3.5);
+    Vector v(1.0, -2.0, 3.5);
 
-    raytracer::Vector result = 2.0 * v;
+    Vector result = 2.0 * v;
 
     EXPECT_DOUBLE_EQ(result.x(), 2.0);
     EXPECT_DOUBLE_EQ(result.y(), -4.0);
@@ -59,16 +59,16 @@ TEST(Vector, MultipliesScalarByVector)
 
 TEST(Vector, ComputesDotProduct)
 {
-    raytracer::Vector a(1.0, 2.0, 3.0);
-    raytracer::Vector b(4.0, 5.0, 6.0);
+    Vector a(1.0, 2.0, 3.0);
+    Vector b(4.0, 5.0, 6.0);
 
     EXPECT_DOUBLE_EQ(a.dot(b), 32.0);
 }
 
 TEST(Vector, DotProductOfPerpendicularVectorsIsZero)
 {
-    raytracer::Vector a(1.0, 0.0, 0.0);
-    raytracer::Vector b(0.0, 1.0, 0.0);
+    Vector a(1.0, 0.0, 0.0);
+    Vector b(0.0, 1.0, 0.0);
 
     EXPECT_DOUBLE_EQ(a.dot(b), 0.0);
 }

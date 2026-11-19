@@ -1,7 +1,5 @@
 #include "math/vector.hpp"
 
-namespace raytracer {
-
 Vector::Vector()
     : _x(0.0), _y(0.0), _z(0.0)
 {
@@ -51,5 +49,3 @@ Vector operator*(double scalar, const Vector& v)
 {
     return v * scalar;
 }
-
-} // namespace raytracer
