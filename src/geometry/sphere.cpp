@@ -23,7 +23,7 @@ const Material& Sphere::material() const
     return *_material;
 }
 
-bool Sphere::hit(const Ray& ray) const
+std::optional<HitInfo> Sphere::hit(const Ray& ray) const
 {
     Vector D = ray.direction();
     Vector O = ray.origin();
@@ -38,15 +38,28 @@ bool Sphere::hit(const Ray& ray) const
 
     if(delta < 0)
     {
-        return false;
+        return std::nullopt;
     }
 
+    // a > 0, so t2 <= t1: t2 is the nearer of the two intersections.
     double t1 = (-b + std::sqrt(delta)) / (2 * a);
     double t2 = (-b - std::sqrt(delta)) / (2 * a);
 
-    if(t1 >= 0 || t2 >= 0)
+    double t;
+    if(t2 >= 0)
     {
-        return true;
+        t = t2;
     }
-    return false;
+    else if(t1 >= 0)
+    {
+        t = t1; // The ray starts inside the sphere.
+    }
+    else
+    {
+        return std::nullopt; // The sphere is behind the ray.
+    }
+
+    Vector point = ray.at(t);
+    Vector normal = (point - C).normalised();
+    return HitInfo{point, normal, _material.get()};
 }

@@ -14,3 +14,8 @@ const Vector& Ray::direction() const
 {
     return _direction;
 }
+
+Vector Ray::at(double t) const
+{
+    return _origin + _direction * t;
+}

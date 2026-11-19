@@ -1,7 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 
+#include "geometry/hit_info.hpp"
 #include "material/material.hpp"
 #include "math/vector.hpp"
 #include "ray/ray.hpp"
@@ -19,8 +21,10 @@ public:
     double radius() const;
     const Material& material() const;
 
-    // Est-ce ce rayon me touch
-    bool hit(const Ray& ray) const;
+    // Where `ray` first hits the sphere (at the closest non-negative t), with
+    // the outward normal there and the sphere's material. Returns
+    // std::nullopt when the ray misses, or when the sphere is behind it.
+    std::optional<HitInfo> hit(const Ray& ray) const;
 
 private:
     Vector _center;

@@ -1,5 +1,7 @@
 #include "camera/camera.hpp"
 
+#include <optional>
+
 Camera::Camera(const Vector& position, double screenWidth)
     : _position(position), _screenWidth(screenWidth)
 {
@@ -41,7 +43,8 @@ void Camera::render(const Sphere& sphere, Image& image) const
         for (int column = 0; column < imageWidth; ++column) {
             const Ray ray = rayThroughPixel(column, row, imageWidth, imageHeight);
 
-            const Colour colour = sphere.hit(ray) ? sphere.material().shade() : Colour(0, 0, 0);
+            const std::optional<HitInfo> hit = sphere.hit(ray);
+            const Colour colour = hit ? hit->material->shade() : Colour(0, 0, 0);
 
             image.setPixel(static_cast<unsigned int>(column), static_cast<unsigned int>(row), colour);
         }
